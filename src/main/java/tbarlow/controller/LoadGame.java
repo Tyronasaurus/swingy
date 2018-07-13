@@ -4,6 +4,9 @@ import tbarlow.model.artefacts.Armour;
 import tbarlow.model.artefacts.Helm;
 import tbarlow.model.artefacts.Weapon;
 import tbarlow.model.characters.Hero;
+import tbarlow.model.characters.Scout;
+import tbarlow.model.characters.Thief;
+import tbarlow.model.characters.Warmonger;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -35,17 +38,31 @@ public class LoadGame {
     public Hero ParseHeroString(String heroString) {
         String[] heroArray = heroString.split(",");
         String name = heroArray[0];
-        int att = Integer.parseInt(heroArray[1]);
-        int def = Integer.parseInt(heroArray[2]);
-        int health = Integer.parseInt(heroArray[3]);
-        int xp = Integer.parseInt(heroArray[4]);
-        int level = Integer.parseInt(heroArray[5]);
+        String type = heroArray[1];
+        int att = Integer.parseInt(heroArray[2]);
+        int def = Integer.parseInt(heroArray[3]);
+        int health = Integer.parseInt(heroArray[4]);
+        int xp = Integer.parseInt(heroArray[5]);
+        int level = Integer.parseInt(heroArray[6]);
 
-        String artefacts[] = { heroArray[6], heroArray[7], heroArray[8] };
+        String artefacts[] = { heroArray[7], heroArray[8], heroArray[9] };
 
-        Hero newHero = new Hero(name, att, def, health, health, xp, level);
+        Hero newHero = new Hero();
 
-        setHeroEquipment(artefacts, newHero);
+        switch (type) {
+            case "Thief" :
+                newHero = new Thief(name, att, def, health, health, xp, level);
+                break;
+            case "Scout":
+                newHero = new Scout(name, att, def, health, health, xp, level);
+                break;
+            case "Warmonger":
+                newHero = new Warmonger(name, att, def, health, health, xp, level);
+                break;
+        }
+
+        if (newHero.heroType != null)
+            setHeroEquipment(artefacts, newHero);
 
         return newHero;
     }

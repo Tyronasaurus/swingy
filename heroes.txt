@@ -1,2 +1,3 @@
-Gjek,15,0,100,800,1,null,null,null
-Testicles,25,3,150,0,1,null,Nipple Caps#4,null
+Fik,Scout,10,3,100,0,1,null,null,Big Spoon#10
+Thief,Thief,15,0,80,0,1,Over-sized Helm#9,null,null
+Hungar,Warmonger,12,5,120,648,1,null,null,null

@@ -50,9 +50,6 @@ public class Character {
     }
 
     public void takeDamage(int damage) {
-        if (damage < 0) {
-            damage = 0;
-        }
         this.hp -= damage;
         if (this.hp < 0) {
             this.hp = 0;

@@ -19,8 +19,9 @@ public class SaveGame {
              BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
              PrintWriter printWriter = new PrintWriter(bufferedWriter))
         {
-            printWriter.printf("%s,%d,%d,%d,%d,%d,%s\n", hero.getName(), hero.getAttack(), hero.getDefense(), hero.getMaxhp(),
-                                hero.getXp(), hero.getLevel(), EquipmentString(hero));
+            String equipment = EquipmentString(hero);
+            printWriter.printf("%s,%s,%d,%d,%d,%d,%d,%s\n", hero.getName(), hero.heroType, hero.getAttack(),
+                                hero.getDefense(), hero.getMaxhp(), hero.getXp(), hero.getLevel(), equipment);
         } catch (IOException e) {
             return false;
         }
@@ -31,6 +32,7 @@ public class SaveGame {
         String eqString = "";
         if (hero.getHelm() != null) {
             eqString += hero.getHelm().getName() + "#" + hero.getHelm().getAmount() + ",";
+            hero.setHpMax(hero.getMaxhp() - hero.getHelm().getAmount());
         }
         else {
             eqString += "null,";
@@ -38,6 +40,7 @@ public class SaveGame {
 
         if (hero.getArmour() != null) {
             eqString += hero.getArmour().getName() + "#" + hero.getArmour().getAmount() + ",";
+            hero.setDefense(hero.getDefense() - hero.getArmour().getAmount());
         }
         else {
             eqString += "null,";
@@ -45,6 +48,7 @@ public class SaveGame {
 
         if (hero.getWeapon() != null) {
             eqString += hero.getWeapon().getName() + "#" + hero.getWeapon().getAmount();
+            hero.setAttack(hero.getAttack() - hero.getWeapon().getAmount());
         }
         else {
             eqString += "null";

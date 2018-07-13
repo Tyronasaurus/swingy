@@ -1,8 +1,8 @@
 package tbarlow.controller;
 
+import com.sun.org.apache.bcel.internal.generic.Select;
 import tbarlow.model.artefacts.HealthPotion;
-import tbarlow.model.characters.Enemy;
-import tbarlow.model.characters.Hero;
+import tbarlow.model.characters.*;
 import tbarlow.model.map.Map;
 
 import java.util.List;
@@ -104,7 +104,7 @@ public class Game {
         System.out.println("A load game has been found. Please select the character you'd like to load:");
         int i = 1;
         for (Hero hero: heroList) {
-            System.out.println(i + ": " + hero.getName() + " lvl" + hero.getLevel());
+            System.out.println(i + ": " + hero.getName() + " the " + hero.heroType);
             i++;
         }
         if (scanner.hasNextInt()) {
@@ -129,14 +129,44 @@ public class Game {
 
         hero = new Hero(name);
 
+        System.out.println("Very well " +  name + ", and your speciality is...?");
+
+        utils.sleep(1000);
+
+        System.out.println("PLEASE TYPE THE NAME OF THE DESIRED CLASS: ");
+
+        SelectClass(name);
+
         utils.sleep(1000);
 
         int enemyCount = hero.getLevel() * 4;
 
-        System.out.println("Very well, " + hero.getName() + ". You begin in the middle of a marsh, " + enemyCount +
+        System.out.println(hero.getName() + " the " + hero.heroType + ", you begin in the middle of a marsh, " + enemyCount +
                 " enemies lurk these lands. BEWARE!");
 
         return;
+    }
+
+    private void SelectClass(String name) {
+        scanner = new Scanner(System.in);
+
+        Hero[] heroes = {new Thief(name), new Warmonger(name), new Scout(name)};
+
+        for (Hero heroClass: heroes) {
+            System.out.println(heroClass.heroType + " - " + heroClass.description);
+        }
+
+        String input = scanner.nextLine();
+        for (Hero heroClass: heroes) {
+            if (input.equalsIgnoreCase(heroClass.heroType)) {
+                hero = heroClass;
+                System.out.println("You looked like a " + hero.heroType + " when I laid my eye sockets on you!");
+            }
+        }
+        if (hero.heroType == null) {
+            SelectClass(name);
+        }
+
     }
 
 
@@ -159,7 +189,7 @@ public class Game {
     }
 
     public int FightOrFlight(Enemy enemy) {
-        System.out.println("You have encountered a " + enemy.getName() + "!");
+        System.out.println("You have spotted a " + enemy.getName() + "!");
         System.out.println("Enemy HP: " + enemy.getHp());
         System.out.println("Enemy Attack: " + enemy.getAttack());
         System.out.println("Enemy Defense: " + enemy.getDefense());

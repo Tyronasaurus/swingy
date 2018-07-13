@@ -4,6 +4,9 @@ import tbarlow.model.artefacts.*;
 
 public class Hero extends Character {
 
+    public String description;
+    public String heroType;
+
     public int xp = 0;
 
     private int level = 0;

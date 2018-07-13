@@ -25,8 +25,10 @@ public class Gameplay {
         Hero hero = map.getHero();
         Scanner scanner = new Scanner(System.in);
         //System.out.println("*HP* " + healthPotion.x + " : " + healthPotion.y);
-        for (Enemy enemy: enemyList) {
-            System.out.println(enemy.getName() + ": " + enemy.getX() + " " + enemy.getY());
+        if (hero.heroType == "Scout") {
+            for (Enemy enemy: enemyList) {
+                System.out.println(enemy.getName() + ": " + enemy.getX() + " " + enemy.getY());
+            }
         }
 
         System.out.println("----" + hero.getName().toUpperCase() + "----");
@@ -85,8 +87,8 @@ public class Gameplay {
         Random rand = new Random();
 
         while (hero.getHp() > 0 && enemy.getHp() > 0) {
-            int herodmg = hero.getAttack() - enemy.getDefense();
-            int enemydmg = enemy.getAttack() - hero.getDefense();
+            int herodmg = Math.max(0, hero.getAttack() - enemy.getDefense());
+            int enemydmg = Math.max(0, enemy.getAttack() - hero.getDefense());
             System.out.println("You " + moves[rand.nextInt(6)] + " " + enemy.getName() + " and deal " + herodmg);
             enemy.takeDamage(herodmg);
             if (enemy.getHp() == 0) {
@@ -124,6 +126,10 @@ public class Gameplay {
         Random rand = new Random();
         int chance = rand.nextInt(100);
 
+        if (hero.heroType.equals("Thief")) {
+            chance = rand.nextInt(80);
+        }
+
         if (chance > 50) {
             //Failed run away
             hero.takeDamage(enemy.getAttack());
@@ -131,7 +137,10 @@ public class Gameplay {
             return (Fight(hero, enemy));
         }
         else {
-            System.out.println("You managed to slip past the enemy unnoticed.");
+            System.out.println("You managed to sneak past the enemy unnoticed, stay too long and it will attack!");
+            if (hero.heroType.equals("Thief")) {
+                ArtefactDropChance(hero);
+            }
             return 2;
         }
     }
@@ -164,7 +173,7 @@ public class Gameplay {
 
     private void ArtefactDropChance(Hero hero) {
         Random rand = new Random();
-        int chance = rand.nextInt(10) + 1;
+        int chance = rand.nextInt(9) + 1;
 
         if (chance > 1 && chance < 5) {
             Artefact[] artefacts = {new Weapon(hero.getLevel()), new Helm(hero.getLevel()), new Armour(hero.getLevel())};
