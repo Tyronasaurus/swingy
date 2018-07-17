@@ -7,6 +7,7 @@ import tbarlow.model.map.Map;
 
 import java.util.List;
 import java.util.Scanner;
+import tbarlow.view.MainMenu;
 
 public class Game {
 
@@ -18,19 +19,22 @@ public class Game {
 
     public static void main(String[] args) {
 
-        new Game(args);
+        if (args[0].equals("gui")) {
+            MainMenu mainMenu = new MainMenu();
+            mainMenu.setVisible(true);
+        }
+        else if(args[0].equals("cli")) {
+            new Game();
+        }
+        
+        
 
     }
 
-    public Game(String[] args) {
-        if (args.length == 1) {
-            loadHero(args);
-            if (hero == null) {
-                newHero();
-            }
-        }
-        else {
-            newHero();
+    public Game() {
+        loadHero();
+        while (hero == null) {
+            loadHero();
         }
 
         map.newLevel(hero);
@@ -94,10 +98,10 @@ public class Game {
         System.out.println("You've exited the game");
     }
 
-    private void loadHero(String[] args) {
+    private void loadHero() {
         scanner = new Scanner(System.in);
         LoadGame loadGame = new LoadGame();
-        List<Hero> heroList = loadGame.LoadHeroList(args[0]);
+        List<Hero> heroList = loadGame.LoadHeroList("heroes.txt");
         if (heroList.size() == 0) {
             return;
         }
@@ -107,11 +111,15 @@ public class Game {
             System.out.println(i + ": " + hero.getName() + " the " + hero.heroType);
             i++;
         }
+        System.out.println(i + ": New Game");
         if (scanner.hasNextInt()) {
             int index = scanner.nextInt();
             if (index <= 0 || index > heroList.size()) {
                 System.out.println("Selected number is invalid");
-                loadHero(args);
+                loadHero();
+            }
+            if (index == i) {
+                newHero();
             }
             hero = heroList.get(index - 1);
         }
