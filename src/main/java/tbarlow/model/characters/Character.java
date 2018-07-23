@@ -1,19 +1,29 @@
 package tbarlow.model.characters;
 
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+
 public class Character {
-
+    
+    @NotNull
     protected String name;
-
+    
+    @Min(0)
     protected int attack;
 
+    @Min(0)
     protected int defense;
 
+    @Min(0)
     protected int hp;
 
+    @Min(0)
     protected int maxhp;
 
+    @Min(0)
     protected int x;
 
+    @Min(0)
     protected int y;
 
     public Character() {
@@ -48,9 +58,11 @@ public class Character {
     public int getMaxhp() {
         return this.maxhp;
     }
+    
+    public void takeDamage( @Min(0) int damage) {
 
-    public void takeDamage(int damage) {
         this.hp -= damage;
+
         if (this.hp < 0) {
             this.hp = 0;
         }

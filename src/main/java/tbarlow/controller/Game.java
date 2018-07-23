@@ -13,17 +13,19 @@ public class Game {
 
     private Utilities utils = new Utilities();
     private Scanner scanner = new Scanner(System.in);
-    private Gameplay gameplay = new Gameplay();
+    private static Gameplay gameplay;
     Map map = new Map();
     Hero hero;
 
     public static void main(String[] args) {
 
         if (args[0].equals("gui")) {
+            
             MainMenu mainMenu = new MainMenu();
             mainMenu.setVisible(true);
         }
         else if(args[0].equals("cli")) {
+            gameplay = new Gameplay("CLI");
             new Game();
         }
         

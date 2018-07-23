@@ -1,12 +1,15 @@
 package tbarlow.model.characters;
 
+
 import tbarlow.model.artefacts.*;
+import javax.validation.constraints.Min;
 
 public class Hero extends Character {
 
     public String description;
     public String heroType;
 
+    @Min(0)
     public int xp = 0;
 
     private int level = 0;

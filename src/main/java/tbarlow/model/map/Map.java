@@ -5,11 +5,16 @@ import tbarlow.model.characters.Hero;
 
 import java.util.ArrayList;
 import java.util.List;
+import javax.validation.constraints.Min;
 
 public class Map {
+    
+    @Min(0)
     public int mapX;
+    @Min(0)
     public int mapY;
 
+    @Min(0)
     private static int enemyCount;
 
     private Hero hero;
@@ -66,6 +71,12 @@ public class Map {
 
     public List<Enemy> getEnemyList() {
         return this.enemyList;
+    }
+
+    public void clearEnemyList() {
+        if (enemyList != null) {
+            enemyList = new ArrayList<>();
+        }
     }
 
     public Hero getHero() {

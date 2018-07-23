@@ -15,8 +15,12 @@ import java.util.Scanner;
 
 public class Gameplay {
 
-    public Gameplay() {
-
+    public String type;
+    //Either GUI or CLI
+    
+    
+    public Gameplay(String type) {
+        this.type = type;
     }
 
     public int Run(Map map) {
@@ -73,7 +77,10 @@ public class Gameplay {
     public Enemy EnemyFound(Hero hero, List<Enemy> enemyList) {
         for (Enemy enemy: enemyList) {
             if (hero.getX() == enemy.getX() && hero.getY() == enemy.getY()) {
-                System.out.println(hero.getX() + ":" + enemy.getX() + " AND " + hero.getY() + ":" + enemy.getY());
+                if (type.equals("CLI")) {
+                    System.out.println(hero.getX() + ":" + enemy.getX() + " AND " + hero.getY() + ":" + enemy.getY());
+                }
+                
                 return enemy;
             }
         }
@@ -89,21 +96,26 @@ public class Gameplay {
         while (hero.getHp() > 0 && enemy.getHp() > 0) {
             int herodmg = Math.max(0, hero.getAttack() - enemy.getDefense());
             int enemydmg = Math.max(0, enemy.getAttack() - hero.getDefense());
-            System.out.println("You " + moves[rand.nextInt(6)] + " " + enemy.getName() + " and deal " + herodmg);
+            if (type.equals("CLI")) {
+                System.out.println("You " + moves[rand.nextInt(6)] + " " + enemy.getName() + " and deal " + herodmg);
+            }
             enemy.takeDamage(herodmg);
             if (enemy.getHp() == 0) {
                 break;
             }
+            if (type.equals("CLI")) {
+                utils.sleep(1000);
 
-            utils.sleep(1000);
-
-            System.out.println(enemy.getName() + " " + moves[rand.nextInt(6)] + "s you and deals " + enemydmg);
+                System.out.println(enemy.getName() + " " + moves[rand.nextInt(6)] + "s you and deals " + enemydmg);
+            }
             hero.takeDamage(enemydmg);
 
-            utils.sleep(1000);
+            if (type.equals("CLI")) {
+                utils.sleep(1000);
 
-            System.out.println('\n' + hero.getName() + ": " + hero.getHp() + "     VS     "
-                    + enemy.getName() + ": " + enemy.getHp() + '\n');
+                System.out.println('\n' + hero.getName() + ": " + hero.getHp() + "     VS     "
+                        + enemy.getName() + ": " + enemy.getHp() + '\n');
+            }
         }
         if (enemy.getHp() == 0) {
             ArtefactDropChance(hero);
@@ -171,31 +183,38 @@ public class Gameplay {
         }
     }
 
-    private void ArtefactDropChance(Hero hero) {
+    public Artefact ArtefactDropChance(Hero hero) {
         Random rand = new Random();
         int chance = rand.nextInt(9) + 1;
-
+        System.out.println(chance);
         if (chance > 1 && chance < 5) {
             Artefact[] artefacts = {new Weapon(hero.getLevel()), new Helm(hero.getLevel()), new Armour(hero.getLevel())};
             Artefact foundArtefact = artefacts[chance - 2];
-            System.out.println("You have found a " + foundArtefact.getName());
-            String boost = "";
-            switch (foundArtefact.getType()) {
-                case "Helm" :
-                    boost = " hp";
-                    break;
-                case "Armour" :
-                    boost = " defense";
-                    break;
-                case "Weapon" :
-                    boost = " attack";
-                    break;
+            if (type.equals("CLI")) {
+
+                System.out.println("You have found a " + foundArtefact.getName());
+                String boost = "";
+                switch (foundArtefact.getType()) {
+                    case "Helm" :
+                        boost = " hp";
+                        break;
+                    case "Armour" :
+                        boost = " defense";
+                        break;
+                    case "Weapon" :
+                        boost = " attack";
+                        break;
+                }
+                System.out.println("+" + foundArtefact.getAmount() + boost);
+                if (YesNo("Would you like to equip it? y/n")) {
+                    Equip(hero, foundArtefact);
+                }
             }
-            System.out.println("+" + foundArtefact.getAmount() + boost);
-            if (YesNo("Would you like to equip it? y/n")) {
-                Equip(hero, foundArtefact);
+            else if (type.equals("GUI")) {
+                return foundArtefact;
             }
         }
+        return null;
     }
 
     public boolean YesNo(String message) {
@@ -211,7 +230,7 @@ public class Gameplay {
         return false;
     }
 
-    private void Equip(Hero hero, Artefact artefact) {
+    public void Equip(Hero hero, Artefact artefact) {
         switch (artefact.getType()) {
             case "Helm" :
                 hero.setHelm((Helm) artefact);

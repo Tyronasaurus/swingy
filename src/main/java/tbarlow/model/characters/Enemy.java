@@ -7,8 +7,6 @@ import java.util.Random;
 
 public class Enemy extends Character {
 
-
-
     private String[] prefix = {"Arch ", "Evil ", "Cursed ", "Wicked ", "", "Foul ", "Unholy "};
 
     private String[] names = {"Goblin", "Troll", "Wyvern", "Murloc", "Warlock", "Basilisk", "Gargoyle", "Werewolf", "Chimaera"};
